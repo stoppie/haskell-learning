@@ -63,15 +63,15 @@ head' :: [a] -> a
 head' [] = error "Can't call head on an empty list, dummy!"
 head' (x:_) = x
 
-head'' :: [a] -> a  
-head'' xs = case xs of [] -> error "No head for empty lists!"  
-                      (x:_) -> x
+-- head'' :: [a] -> a  
+-- head'' xs = case xs of [] -> error "No head for empty lists!"  
+--                       (x:_) -> x
 
 capital :: String -> String
 capital "" = "Empty string, whoops!"
 capital all@(x:xs) = "The first letter of " ++ all ++ " is" ++ [x]
 
-bmiTell :: (RealFloat a) => a -> a -> String  
+bmiTell :: (RealFloat a) => a -> a -> String
 bmiTell weight height  
     | bmi <= skinny = "You're underweight, you emo, you!"  
     | bmi <= normal = "You're supposedly normal. Pffft, I bet you're ugly!"  
@@ -96,3 +96,38 @@ describeList xs = "The list is " ++ what xs
     where what [] = "empty."  
           what [x] = "a singleton list."  
           what xs = "a longer list."
+
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "maximum of empty list"
+maximum' [x] = x
+maximum' (x:xs)
+    | x > maxTail = x
+    | otherwise = maxTail
+    where maxTail = maximum' xs
+
+replicate' :: Int -> a -> [a]
+replicate' n x
+    | n <= 0 = []
+    | otherwise = x:replicate' (n - 1) x
+
+take' :: Int -> [a] -> [a]
+take' n _
+    | n <= 0 = []
+take' _ [] = []
+take' n (x:xs) = x:take' (n - 1) xs
+
+reverse' :: [a] -> [a]
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+zip' :: [a] -> [b] -> [(a, b)]
+zip' x y
+    | null x || null y = []
+zip' (x:xs) (y:ys) = (x, y) : zip' xs ys
+
+quicksort :: (Ord a) => [a] -> [a]  
+quicksort [] = []  
+quicksort (x:xs) =   
+    let smallerSorted = quicksort [a | a <- xs, a <= x]  
+        biggerSorted = quicksort [a | a <- xs, a > x]  
+    in  smallerSorted ++ [x] ++ biggerSorted
